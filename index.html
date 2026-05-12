@@ -463,10 +463,6 @@
       playTone(280, 0.18, 'sine', 0.13, 560);
       playTone(420, 0.12, 'triangle', 0.06, 700);
     }
-    function sfxLand() {
-      playNoise(0.08, 0.06);
-      playTone(90, 0.1, 'sine', 0.08, 45);
-    }
     function sfxLane() {
       playTone(520, 0.1, 'square', 0.05, 380);
       playNoise(0.06, 0.04);
@@ -588,11 +584,11 @@
       if (dino.jumping) {
         dino.vy += GRAVITY * dt;
         dino.y += dino.vy * dt;
-        if (dino.y >= 0) { dino.y = 0; dino.vy = 0; dino.jumping = false; sfxLand(); }
+        if (dino.y >= 0) { dino.y = 0; dino.vy = 0; dino.jumping = false; }
       }
 
       // Score milestone sound every 50 points
-      const ms = Math.floor(score / 50);
+      const ms = Math.floor(score / 100);
       if (ms > lastMilestone) { lastMilestone = ms; sfxMilestone(); }
 
       animTimer += dt;
