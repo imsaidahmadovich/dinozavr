@@ -421,6 +421,71 @@
     let spawnTimer = 0, spawnInt = 1.9;
     let animFrame = 0, animTimer = 0;
     let deathReason = '';
+    let lastMilestone = 0;
+
+    // ═══════════════════════════════
+    // AUDIO ENGINE (Web Audio API)
+    // ═══════════════════════════════
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTone(freq, dur, type, vol, ramp) {
+      if (!audioCtx) return;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type || 'sine';
+      o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      if (ramp) o.frequency.exponentialRampToValueAtTime(ramp, audioCtx.currentTime + dur);
+      g.gain.setValueAtTime(vol || 0.12, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + dur);
+    }
+
+    function playNoise(dur, vol) {
+      if (!audioCtx) return;
+      const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * dur, audioCtx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(vol || 0.08, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      src.connect(g); g.connect(audioCtx.destination);
+      src.start(); src.stop(audioCtx.currentTime + dur);
+    }
+
+    function sfxJump() {
+      playTone(280, 0.18, 'sine', 0.13, 560);
+      playTone(420, 0.12, 'triangle', 0.06, 700);
+    }
+    function sfxLand() {
+      playNoise(0.08, 0.06);
+      playTone(90, 0.1, 'sine', 0.08, 45);
+    }
+    function sfxLane() {
+      playTone(520, 0.1, 'square', 0.05, 380);
+      playNoise(0.06, 0.04);
+    }
+    function sfxDeath() {
+      playNoise(0.4, 0.18);
+      playTone(260, 0.35, 'sawtooth', 0.14, 50);
+      playTone(180, 0.5, 'sine', 0.1, 30);
+    }
+    function sfxStart() {
+      playTone(440, 0.12, 'square', 0.07, 660);
+      setTimeout(() => playTone(660, 0.12, 'square', 0.07, 880), 100);
+      setTimeout(() => playTone(880, 0.2, 'square', 0.09, 1100), 200);
+    }
+    function sfxMilestone() {
+      playTone(880, 0.08, 'sine', 0.1);
+      setTimeout(() => playTone(1100, 0.08, 'sine', 0.1), 70);
+      setTimeout(() => playTone(1320, 0.15, 'sine', 0.12), 140);
+    }
 
     // ═══════════════════════════════
     // BOOT
@@ -485,14 +550,15 @@
     // ═══════════════════════════════
     // GAME FLOW
     // ═══════════════════════════════
-    function startGame() { document.getElementById('overlay').style.display = 'none'; beginGame(); }
-    function restartGame() { document.getElementById('gameover-overlay').style.display = 'none'; beginGame(); }
+    function startGame() { ensureAudio(); document.getElementById('overlay').style.display = 'none'; beginGame(); }
+    function restartGame() { ensureAudio(); document.getElementById('gameover-overlay').style.display = 'none'; beginGame(); }
 
     function beginGame() {
       score = 0; gameSpeed = 560; spawnTimer = 0; spawnInt = 1.5;
-      animFrame = 0; animTimer = 0;
+      animFrame = 0; animTimer = 0; lastMilestone = 0;
       initDino(); obstacles = []; particles = []; makeClouds();
       running = true; lastTime = performance.now();
+      sfxStart();
       requestAnimationFrame(loop);
     }
 
@@ -522,8 +588,12 @@
       if (dino.jumping) {
         dino.vy += GRAVITY * dt;
         dino.y += dino.vy * dt;
-        if (dino.y >= 0) { dino.y = 0; dino.vy = 0; dino.jumping = false; }
+        if (dino.y >= 0) { dino.y = 0; dino.vy = 0; dino.jumping = false; sfxLand(); }
       }
+
+      // Score milestone sound every 50 points
+      const ms = Math.floor(score / 50);
+      if (ms > lastMilestone) { lastMilestone = ms; sfxMilestone(); }
 
       animTimer += dt;
       if (!dino.jumping && animTimer > 0.09) { animFrame = (animFrame + 1) % 4; animTimer = 0; }
@@ -620,6 +690,7 @@
     function killDino(hitKind) {
       if (dino.dead) return;
       dino.dead = true; running = false;
+      sfxDeath();
       const col = hitKind === 'red' ? '#ff2244' : '#00ff88';
       for (let i = 0; i < 38; i++) {
         const a = rnd() * Math.PI * 2, sp = 100 + rnd() * 300;
@@ -662,15 +733,15 @@
 
       if (['ArrowUp', 'KeyW', 'Space'].includes(e.code)) {
         e.preventDefault();
-        if (!dino.jumping) { dino.jumping = true; dino.vy = JUMP_V; dino.eyeBlink = 0.15; }
+        if (!dino.jumping) { dino.jumping = true; dino.vy = JUMP_V; dino.eyeBlink = 0.15; sfxJump(); }
       }
       if (['ArrowRight', 'KeyD'].includes(e.code)) {
         e.preventDefault();
-        if (dino.targetLane < 2) { dino.lane = dino.targetLane; dino.targetLane++; dino.laneT = 0; }
+        if (dino.targetLane < 2) { dino.lane = dino.targetLane; dino.targetLane++; dino.laneT = 0; sfxLane(); }
       }
       if (['ArrowLeft', 'KeyA'].includes(e.code)) {
         e.preventDefault();
-        if (dino.targetLane > 0) { dino.lane = dino.targetLane; dino.targetLane--; dino.laneT = 0; }
+        if (dino.targetLane > 0) { dino.lane = dino.targetLane; dino.targetLane--; dino.laneT = 0; sfxLane(); }
       }
     });
 
