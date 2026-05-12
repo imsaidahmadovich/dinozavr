@@ -71,12 +71,15 @@
 
     #score-display {
       color: var(--gold);
-      font-size: 18px;
+      font-size: 22px;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(245, 166, 35, 0.4);
     }
 
     #hi-display {
       color: var(--cyan);
       font-size: 11px;
+      opacity: 0.8;
     }
 
     #player-display {
@@ -283,10 +286,48 @@
       color: rgba(234, 234, 234, 0.45);
     }
 
-    #final-score {
-      font-size: 13px;
+    #final-score-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 8px 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+
+    .score-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .score-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: rgba(234, 234, 234, 0.4);
+    }
+
+    .score-value {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    #final-score-val {
+      font-size: 42px;
       color: var(--gold);
-      letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(245, 166, 35, 0.6);
+    }
+
+    #hi-score-val {
+      font-size: 26px;
+      color: var(--cyan);
+      text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
     }
 
     #restart-btn {
@@ -372,7 +413,16 @@
     <div id="gameover-overlay">
       <h2 id="loser-name"><strong>YOU DIED!</strong> </h2>
       <div id="death-reason">—</div>
-      <div id="final-score"></div>
+      <div id="final-score-container">
+        <div class="score-row">
+          <div class="score-label">Score</div>
+          <div id="final-score-val" class="score-value">00000</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">High Score</div>
+          <div id="hi-score-val" class="score-value">00000</div>
+        </div>
+      </div>
       <button id="restart-btn" onclick="restartGame()">RUN AGAIN</button>
     </div>
   </div>
@@ -704,8 +754,8 @@
     function showGO() {
       document.getElementById('gameover-overlay').style.display = 'flex';
       document.getElementById('death-reason').textContent = deathReason;
-      document.getElementById('final-score').textContent =
-        'SCORE: ' + fmt(score) + '   HI: ' + fmt(hiScore);
+      document.getElementById('final-score-val').textContent = fmt(score);
+      document.getElementById('hi-score-val').textContent = fmt(hiScore);
     }
 
     // ═══════════════════════════════
