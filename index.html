@@ -40,10 +40,13 @@
       position: relative;
       width: 900px;
       height: 520px;
+      transform-origin: center center;
     }
 
     canvas {
       display: block;
+      width: 900px;
+      height: 520px;
       border: 2px solid var(--accent);
       box-shadow: 0 0 40px rgba(233, 69, 96, 0.4), 0 0 80px rgba(0, 212, 255, 0.1);
       background: var(--bg);
@@ -260,6 +263,94 @@
       }
     }
 
+    /* ── Difficulty Selector ── */
+    .diff-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .diff-label {
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: rgba(234, 234, 234, 0.35);
+      text-transform: uppercase;
+    }
+
+    .diff-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .diff-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      color: rgba(234, 234, 234, 0.5);
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diff-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .diff-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .diff-btn.selected {
+      transform: translateY(-1px);
+    }
+
+    .diff-btn[data-diff="easy"] { --dc: #00ff88; }
+    .diff-btn[data-diff="normal"] { --dc: #00d4ff; }
+    .diff-btn[data-diff="hard"] { --dc: #f5a623; }
+    .diff-btn[data-diff="insane"] { --dc: #ff2244; }
+
+    .diff-btn:hover,
+    .diff-btn.selected {
+      border-color: var(--dc);
+      color: var(--dc);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--dc) 35%, transparent),
+                  inset 0 0 14px color-mix(in srgb, var(--dc) 10%, transparent);
+      text-shadow: 0 0 8px var(--dc);
+    }
+
+    .diff-btn.selected::after {
+      content: '▾';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 7px;
+      color: var(--dc);
+    }
+
+    .diff-desc {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: rgba(234, 234, 234, 0.25);
+      min-height: 14px;
+      transition: color 0.2s ease;
+    }
+
+    #diff-hud {
+      font-size: 9px;
+      letter-spacing: 2px;
+      margin-top: 2px;
+    }
+
     #gameover-overlay {
       position: absolute;
       inset: 0;
@@ -359,6 +450,18 @@
     #controls-bar span {
       color: rgba(233, 69, 96, 0.5);
     }
+
+    #score-mode-line {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    #score-mode-line .mode-tag {
+      font-weight: 900;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 
@@ -371,6 +474,7 @@
       <div class="hud-box">
         <div id="player-display">Player: —</div>
         <div id="lane-display">Lane: MID</div>
+        <div id="diff-hud"></div>
       </div>
       <div class="hud-box" style="text-align:right">
         <div id="score-display">00000</div>
@@ -407,6 +511,16 @@
         <div><span>A / ←</span> — LANE FARTHER (smaller)</div>
         <div><span>RED WALLS</span> — fill full height, can't jump</div>
       </div>
+      <div class="diff-section">
+        <div class="diff-label">SELECT DIFFICULTY</div>
+        <div class="diff-row">
+          <button class="diff-btn" data-diff="easy" onclick="selectDiff('easy')">EASY</button>
+          <button class="diff-btn selected" data-diff="normal" onclick="selectDiff('normal')">NORMAL</button>
+          <button class="diff-btn" data-diff="hard" onclick="selectDiff('hard')">HARD</button>
+          <button class="diff-btn" data-diff="insane" onclick="selectDiff('insane')">INSANE</button>
+        </div>
+        <div id="diff-desc" class="diff-desc">STANDARD ACCELERATION — THE DEFAULT EXPERIENCE</div>
+      </div>
       <button id="start-btn" onclick="startGame()">Start</button>
     </div>
 
@@ -418,6 +532,7 @@
           <div class="score-label">Score</div>
           <div id="final-score-val" class="score-value">00000</div>
         </div>
+        <div id="score-mode-line">YOU SCORED <span id="mode-score-val" style="color:var(--gold)">0</span> IN <span id="mode-name-val" class="mode-tag">NORMAL</span> MODE</div>
         <div class="score-row">
           <div class="score-label">High Score</div>
           <div id="hi-score-val" class="score-value">00000</div>
@@ -472,6 +587,24 @@
     let animFrame = 0, animTimer = 0;
     let deathReason = '';
     let lastMilestone = 0;
+
+    // ── Difficulty Settings ──
+    const DIFFICULTIES = {
+      easy:   { accel: 10, minSpawn: 0.7,  label: 'EASY',   color: '#00ff88', desc: 'CHILL RAMP — GREAT FOR LEARNING' },
+      normal: { accel: 22, minSpawn: 0.5,  label: 'NORMAL', color: '#00d4ff', desc: 'STANDARD ACCELERATION — THE DEFAULT EXPERIENCE' },
+      hard:   { accel: 38, minSpawn: 0.38, label: 'HARD',   color: '#f5a623', desc: 'GETS BRUTAL FAST — FOR EXPERIENCED RUNNERS' },
+      insane: { accel: 55, minSpawn: 0.25, label: 'INSANE', color: '#ff2244', desc: 'SPEEDRUN TERRITORY — GOOD LUCK' }
+    };
+    let selectedDiff = 'normal';
+
+    function selectDiff(key) {
+      selectedDiff = key;
+      const d = DIFFICULTIES[key];
+      document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelector(`.diff-btn[data-diff="${key}"]`).classList.add('selected');
+      document.getElementById('diff-desc').textContent = d.desc;
+      document.getElementById('diff-desc').style.color = d.color;
+    }
 
     // ═══════════════════════════════
     // AUDIO ENGINE (Web Audio API)
@@ -536,6 +669,18 @@
     // ═══════════════════════════════
     // BOOT
     // ═══════════════════════════════
+    // ── Responsive Scaling ──
+    function resizeGame() {
+      const wrapper = document.getElementById('game-wrapper');
+      const pad = 24;
+      const scaleX = (window.innerWidth - pad) / 900;
+      const scaleY = (window.innerHeight - pad) / 560;
+      const scale = Math.min(scaleX, scaleY, 1.0);
+      wrapper.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener('resize', resizeGame);
+
     window.onload = () => {
       canvas = document.getElementById('c');
       ctx = canvas.getContext('2d');
@@ -547,6 +692,7 @@
       makeGLines();
       makeClouds();
       initDino();
+      resizeGame();
       render();
     };
 
@@ -601,6 +747,9 @@
 
     function beginGame() {
       score = 0; gameSpeed = 560; spawnTimer = 0; spawnInt = 1.5;
+      const diff = DIFFICULTIES[selectedDiff];
+      document.getElementById('diff-hud').textContent = 'MODE: ' + diff.label;
+      document.getElementById('diff-hud').style.color = diff.color;
       animFrame = 0; animTimer = 0; lastMilestone = 0;
       initDino(); obstacles = []; particles = []; makeClouds();
       running = true; lastTime = performance.now();
@@ -620,9 +769,10 @@
     // UPDATE
     // ═══════════════════════════════
     function update(dt) {
-      score += dt * 14 * (gameSpeed / 560);
-      gameSpeed += dt * 22;
-      spawnInt = Math.max(0.5, 1.5 - score * 0.004);
+      score += dt * 5;
+      const diff = DIFFICULTIES[selectedDiff];
+      gameSpeed += dt * diff.accel;
+      spawnInt = Math.max(diff.minSpawn, 1.5 - score * 0.004);
 
       // Lane transition
       if (dino.lane !== dino.targetLane) {
@@ -752,10 +902,16 @@
     }
 
     function showGO() {
+      const diff = DIFFICULTIES[selectedDiff];
       document.getElementById('gameover-overlay').style.display = 'flex';
       document.getElementById('death-reason').textContent = deathReason;
       document.getElementById('final-score-val').textContent = fmt(score);
       document.getElementById('hi-score-val').textContent = fmt(hiScore);
+      document.getElementById('mode-score-val').textContent = Math.floor(score);
+      const modeEl = document.getElementById('mode-name-val');
+      modeEl.textContent = diff.label;
+      modeEl.style.color = diff.color;
+      modeEl.style.textShadow = `0 0 10px ${diff.color}`;
     }
 
     // ═══════════════════════════════
