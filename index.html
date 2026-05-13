@@ -462,6 +462,167 @@
       font-weight: 900;
       text-transform: uppercase;
     }
+
+    /* ── UI Buttons ── */
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--cyan);
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      padding: 6px 12px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: all 0.2s;
+    }
+    .icon-btn:hover {
+      background: var(--cyan);
+      color: var(--bg);
+    }
+
+    /* ── Profile & Leaderboard Overlays ── */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-box {
+      background: rgba(20, 20, 30, 0.9);
+      border: 2px solid var(--accent);
+      padding: 30px;
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      box-shadow: 0 0 30px rgba(233, 69, 96, 0.2);
+    }
+
+    .modal-title {
+      font-family: 'VT323', monospace;
+      font-size: 32px;
+      color: var(--gold);
+      text-align: center;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-group label {
+      font-size: 10px;
+      color: rgba(234, 234, 234, 0.6);
+      letter-spacing: 2px;
+    }
+
+    .input-group input, .input-group select {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(234, 234, 234, 0.2);
+      color: var(--white);
+      padding: 10px;
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--cyan);
+    }
+
+    /* ── Leaderboard Table ── */
+    .lb-tabs {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .lb-tab {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+      padding: 5px 10px;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .lb-tab.active {
+      opacity: 1;
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .lb-table-container {
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .lb-table-container::-webkit-scrollbar { width: 6px; }
+    .lb-table-container::-webkit-scrollbar-thumb { background: var(--accent); }
+
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      text-align: left;
+    }
+
+    .lb-table th {
+      position: sticky;
+      top: 0;
+      background: #111;
+      color: var(--cyan);
+      padding: 8px;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lb-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .lb-table tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+    .lb-table tr:hover { background: rgba(255, 255, 255, 0.05); }
+
+    .lb-rank { color: rgba(255, 255, 255, 0.4); width: 40px; }
+    .lb-name { color: var(--white); }
+    .lb-score { color: var(--gold); text-align: right; font-weight: 900; }
+    
+    .lb-loading {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--cyan);
+      animation: flicker 1.5s infinite;
+    }
+
+    .close-btn {
+      align-self: center;
+      margin-top: 10px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .close-btn:hover { color: var(--white); }
   </style>
 </head>
 
@@ -521,7 +682,10 @@
         </div>
         <div id="diff-desc" class="diff-desc">STANDARD ACCELERATION — THE DEFAULT EXPERIENCE</div>
       </div>
-      <button id="start-btn" onclick="startGame()">Start</button>
+      <div style="display:flex; gap:15px; margin-top:5px;">
+        <button id="start-btn" onclick="startGame()">Start</button>
+        <button class="icon-btn" onclick="showLeaderboard()">LEADERBOARD</button>
+      </div>
     </div>
 
     <div id="gameover-overlay">
@@ -538,8 +702,79 @@
           <div id="hi-score-val" class="score-value">00000</div>
         </div>
       </div>
-      <button id="restart-btn" onclick="restartGame()">RUN AGAIN</button>
+      <div style="display:flex; gap:10px; margin-top: 4px;">
+        <button id="restart-btn" onclick="restartGame()">RUN AGAIN</button>
+        <button class="icon-btn" onclick="showLeaderboard()">LEADERBOARD</button>
+      </div>
     </div>
+
+    <!-- ── Profile Modal ── -->
+    <div id="profile-modal" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-title">RUNNER PROFILE</div>
+        <div class="input-group">
+          <label>CODENAME</label>
+          <input type="text" id="prof-name" placeholder="Enter username" maxlength="12">
+        </div>
+        <div class="input-group">
+          <label>REGION (COUNTRY)</label>
+          <select id="prof-country">
+            <option value="US">🇺🇸 United States</option>
+            <option value="GB">🇬🇧 United Kingdom</option>
+            <option value="CA">🇨🇦 Canada</option>
+            <option value="AU">🇦🇺 Australia</option>
+            <option value="DE">🇩🇪 Germany</option>
+            <option value="FR">🇫🇷 France</option>
+            <option value="JP">🇯🇵 Japan</option>
+            <option value="BR">🇧🇷 Brazil</option>
+            <option value="IN">🇮🇳 India</option>
+            <option value="KR">🇰🇷 South Korea</option>
+            <option value="RU">🇷🇺 Russia</option>
+            <option value="CN">🇨🇳 China</option>
+            <option value="IT">🇮🇹 Italy</option>
+            <option value="ES">🇪🇸 Spain</option>
+            <option value="MX">🇲🇽 Mexico</option>
+            <option value="ID">🇮🇩 Indonesia</option>
+            <option value="TR">🇹🇷 Turkey</option>
+            <option value="NL">🇳🇱 Netherlands</option>
+            <option value="SE">🇸🇪 Sweden</option>
+            <option value="PL">🇵🇱 Poland</option>
+            <option value="XX">🏳️ Other</option>
+          </select>
+        </div>
+        <button id="start-btn" style="width:100%; margin-top:10px;" onclick="saveProfile()">CONFIRM</button>
+      </div>
+    </div>
+
+    <!-- ── Leaderboard Modal ── -->
+    <div id="lb-modal" class="modal-overlay">
+      <div class="modal-box" style="width: 500px;">
+        <div class="modal-title" style="color:var(--cyan)">GLOBAL RANKINGS</div>
+        <div class="lb-tabs" id="lb-tabs">
+          <button class="lb-tab" data-diff="easy" onclick="loadLeaderboard('easy')">EASY</button>
+          <button class="lb-tab active" data-diff="normal" onclick="loadLeaderboard('normal')">NORMAL</button>
+          <button class="lb-tab" data-diff="hard" onclick="loadLeaderboard('hard')">HARD</button>
+          <button class="lb-tab" data-diff="insane" onclick="loadLeaderboard('insane')">INSANE</button>
+        </div>
+        <div class="lb-table-container">
+          <table class="lb-table">
+            <thead>
+              <tr>
+                <th class="lb-rank">#</th>
+                <th>CTRY</th>
+                <th>RUNNER</th>
+                <th style="text-align:right">SCORE</th>
+              </tr>
+            </thead>
+            <tbody id="lb-body">
+              <tr><td colspan="4" class="lb-loading">LOADING DATA...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="close-btn" onclick="closeLeaderboard()">CLOSE</button>
+      </div>
+    </div>
+
   </div>
 
   <div id="controls-bar">
@@ -548,7 +783,30 @@
     <div><span>D/→</span> NEAR LANE</div>
   </div>
 
-  <script>
+  <script type="module">
+    // ═══════════════════════════════
+    // FIREBASE SETUP
+    // ═══════════════════════════════
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZRPunArYK30FvZGE9QePGKXL7XBqUriU",
+      authDomain: "studio-9633138910-a4887.firebaseapp.com",
+      projectId: "studio-9633138910-a4887",
+      storageBucket: "studio-9633138910-a4887.firebasestorage.app",
+      messagingSenderId: "651645718711",
+      appId: "1:651645718711:web:e550bc292ed9ec90d1fd32"
+    };
+
+    let db;
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+    } catch(e) {
+      console.warn("Firebase initialization failed. Offline mode active.", e);
+    }
+
     // ═══════════════════════════════
     // CONFIG
     // ═══════════════════════════════
@@ -576,7 +834,8 @@
     let canvas, ctx;
     let running = false;
     let score = 0, hiScore = 0;
-    let username = 'Player' + Math.floor(Math.random() * 900 + 100);
+    let username = 'Runner';
+    let country = 'US';
 
     let dino = {};
     let obstacles = [], particles = [];
@@ -605,6 +864,7 @@
       document.getElementById('diff-desc').textContent = d.desc;
       document.getElementById('diff-desc').style.color = d.color;
     }
+    window.selectDiff = selectDiff;
 
     // ═══════════════════════════════
     // AUDIO ENGINE (Web Audio API)
@@ -684,10 +944,18 @@
     window.onload = () => {
       canvas = document.getElementById('c');
       ctx = canvas.getContext('2d');
-      username = getUsername();
-      document.getElementById('player-display').textContent = 'PLAYER: ' + username;
-      document.getElementById('runner-name').textContent = 'Hello,  ' + username;
-      document.getElementById('loser-name').textContent = 'YOU DIED! ' + username;
+      
+      const savedName = localStorage.getItem('ilr_name');
+      const savedCountry = localStorage.getItem('ilr_country');
+      
+      if (!savedName || !savedCountry) {
+        document.getElementById('profile-modal').style.display = 'flex';
+      } else {
+        username = savedName;
+        country = savedCountry;
+        updatePlayerDisplay();
+      }
+
       makeStars();
       makeGLines();
       makeClouds();
@@ -696,15 +964,27 @@
       render();
     };
 
-    function getUsername() {
-      let n = localStorage.getItem('ilr_name');
-      if (!n) {
-        n = (prompt('Your runner name:', 'Runner') || 'Runner')
-          .replace(/[^\w]/g, '') || 'Runner';
-        localStorage.setItem('ilr_name', n);
-      }
-      return n;
+    function updatePlayerDisplay() {
+      document.getElementById('player-display').textContent = 'PLAYER: ' + username;
+      document.getElementById('runner-name').textContent = 'Hello, ' + username;
+      document.getElementById('loser-name').innerHTML = '<strong>YOU DIED!</strong>';
     }
+
+    function saveProfile() {
+      const n = document.getElementById('prof-name').value.replace(/[^\w]/g, '').trim();
+      const c = document.getElementById('prof-country').value;
+      if (!n) return alert('Please enter a valid codename');
+      
+      username = n;
+      country = c;
+      localStorage.setItem('ilr_name', username);
+      localStorage.setItem('ilr_country', country);
+      
+      updatePlayerDisplay();
+      document.getElementById('profile-modal').style.display = 'none';
+      ensureAudio();
+    }
+    window.saveProfile = saveProfile;
 
     let clouds = [];
     function makeClouds() {
@@ -743,7 +1023,9 @@
     // GAME FLOW
     // ═══════════════════════════════
     function startGame() { ensureAudio(); document.getElementById('overlay').style.display = 'none'; beginGame(); }
+    window.startGame = startGame;
     function restartGame() { ensureAudio(); document.getElementById('gameover-overlay').style.display = 'none'; beginGame(); }
+    window.restartGame = restartGame;
 
     function beginGame() {
       score = 0; gameSpeed = 560; spawnTimer = 0; spawnInt = 1.5;
@@ -901,7 +1183,7 @@
       setTimeout(showGO, 650);
     }
 
-    function showGO() {
+    async function showGO() {
       const diff = DIFFICULTIES[selectedDiff];
       document.getElementById('gameover-overlay').style.display = 'flex';
       document.getElementById('death-reason').textContent = deathReason;
@@ -912,7 +1194,75 @@
       modeEl.textContent = diff.label;
       modeEl.style.color = diff.color;
       modeEl.style.textShadow = `0 0 10px ${diff.color}`;
+
+      // Save score to Firestore
+      if (score > 0 && navigator.onLine && db) {
+        try {
+          await addDoc(collection(db, "scores"), {
+            name: username,
+            country: country,
+            score: Math.floor(score),
+            diff: selectedDiff,
+            timestamp: new Date()
+          });
+        } catch (e) {
+          console.error("Error saving score", e);
+        }
+      }
     }
+
+    // ─── LEADERBOARD ────────────────
+    function showLeaderboard() {
+      document.getElementById('lb-modal').style.display = 'flex';
+      loadLeaderboard(selectedDiff);
+    }
+    window.showLeaderboard = showLeaderboard;
+
+    function closeLeaderboard() {
+      document.getElementById('lb-modal').style.display = 'none';
+    }
+    window.closeLeaderboard = closeLeaderboard;
+
+    async function loadLeaderboard(diffKey) {
+      document.querySelectorAll('.lb-tab').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.lb-tab[data-diff="${diffKey}"]`).classList.add('active');
+      
+      const tbody = document.getElementById('lb-body');
+      tbody.innerHTML = '<tr><td colspan="4" class="lb-loading">LOADING DATA...</td></tr>';
+      
+      if (!navigator.onLine || !db) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--red);">OFFLINE MODE</td></tr>';
+        return;
+      }
+
+      try {
+        const q = query(collection(db, "scores"), where("diff", "==", diffKey), orderBy("score", "desc"), limit(100));
+        const querySnapshot = await getDocs(q);
+        
+        let html = '';
+        let rank = 1;
+        querySnapshot.forEach((doc) => {
+          const d = doc.data();
+          // Map country code to emoji
+          const cFlag = d.country === 'XX' ? '🏳️' : d.country.toUpperCase().replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397));
+          html += `
+            <tr>
+              <td class="lb-rank">${rank}</td>
+              <td>${cFlag}</td>
+              <td class="lb-name">${d.name}</td>
+              <td class="lb-score">${d.score}</td>
+            </tr>`;
+          rank++;
+        });
+        
+        if (html === '') html = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: rgba(255,255,255,0.4);">NO SCORES YET</td></tr>';
+        tbody.innerHTML = html;
+      } catch (e) {
+        console.error("Error loading leaderboard", e);
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--red);">DATABASE PERMISSION OR INDEX ERROR<br>Ensure Firestore rules allow read/write and indices are built.</td></tr>';
+      }
+    }
+    window.loadLeaderboard = loadLeaderboard;
 
     // ═══════════════════════════════
     // INPUT
