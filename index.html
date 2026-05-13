@@ -623,6 +623,203 @@
       text-decoration: underline;
     }
     .close-btn:hover { color: var(--white); }
+
+    /* ── Auth Modal ── */
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 10px;
+    }
+    .auth-tab {
+      flex: 1;
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(234, 234, 234, 0.4);
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .auth-tab.active {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(245, 166, 35, 0.08);
+    }
+    .auth-tab:first-child { border-right: none; }
+    .auth-panel { display: none; }
+    .auth-panel.active { display: flex; flex-direction: column; gap: 12px; }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 9px;
+      color: rgba(234, 234, 234, 0.3);
+      letter-spacing: 2px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      color: #333;
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .google-btn:hover {
+      background: #fff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    .google-btn svg { width: 18px; height: 18px; }
+
+    .auth-error {
+      font-size: 9px;
+      color: var(--red);
+      text-align: center;
+      letter-spacing: 1px;
+      min-height: 14px;
+      padding: 4px;
+    }
+
+    .auth-submit {
+      background: none;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .auth-submit:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .auth-submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── Save Score Section (Game Over) ── */
+    .save-score-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .save-btn {
+      background: none;
+      border: 2px solid var(--green);
+      color: var(--green);
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      padding: 9px 24px;
+      cursor: pointer;
+      animation: pulse-green 2s infinite;
+      transition: all 0.2s;
+    }
+    .save-btn:hover {
+      background: var(--green);
+      color: var(--bg);
+    }
+    .save-btn:disabled {
+      opacity: 0.4;
+      animation: none;
+      cursor: default;
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 136, 0.3); }
+      50% { box-shadow: 0 0 22px rgba(0, 255, 136, 0.7); }
+    }
+    .save-status {
+      font-size: 9px;
+      letter-spacing: 2px;
+      min-height: 16px;
+    }
+    .signin-prompt-btn {
+      background: none;
+      border: 1.5px solid rgba(245, 166, 35, 0.5);
+      color: var(--gold);
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 7px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      opacity: 0.8;
+    }
+    .signin-prompt-btn:hover {
+      opacity: 1;
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+    }
+
+    /* ── HUD Auth State ── */
+    #auth-hud {
+      font-size: 9px;
+      letter-spacing: 1px;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #auth-hud .auth-name {
+      color: var(--green);
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #auth-hud .guest-label {
+      color: rgba(234, 234, 234, 0.35);
+    }
+    .signout-btn {
+      background: none;
+      border: 1px solid rgba(255, 34, 68, 0.3);
+      color: rgba(255, 34, 68, 0.6);
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      padding: 2px 6px;
+      cursor: pointer;
+      pointer-events: all;
+      letter-spacing: 1px;
+    }
+    .signout-btn:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .hud-signin-btn {
+      background: none;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      color: rgba(245, 166, 35, 0.6);
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      padding: 2px 6px;
+      cursor: pointer;
+      pointer-events: all;
+      letter-spacing: 1px;
+    }
+    .hud-signin-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
   </style>
 </head>
 
@@ -633,9 +830,13 @@
 
     <div id="hud">
       <div class="hud-box">
-        <div id="player-display">Player: —</div>
+        <div id="player-display">GUEST</div>
         <div id="lane-display">Lane: MID</div>
         <div id="diff-hud"></div>
+        <div id="auth-hud">
+          <span class="guest-label">NOT SIGNED IN</span>
+          <button class="hud-signin-btn" onclick="showAuthModal()">SIGN IN</button>
+        </div>
       </div>
       <div class="hud-box" style="text-align:right">
         <div id="score-display">00000</div>
@@ -685,6 +886,7 @@
       <div style="display:flex; gap:15px; margin-top:5px;">
         <button id="start-btn" onclick="startGame()">Start</button>
         <button class="icon-btn" onclick="showLeaderboard()">LEADERBOARD</button>
+        <button class="icon-btn" onclick="showAuthModal()" id="menu-auth-btn" style="border-color:var(--gold);color:var(--gold)">SIGN IN</button>
       </div>
     </div>
 
@@ -702,47 +904,94 @@
           <div id="hi-score-val" class="score-value">00000</div>
         </div>
       </div>
+      <div class="save-score-section" id="save-score-section">
+        <!-- Filled dynamically by showGO() -->
+      </div>
       <div style="display:flex; gap:10px; margin-top: 4px;">
         <button id="restart-btn" onclick="restartGame()">RUN AGAIN</button>
         <button class="icon-btn" onclick="showLeaderboard()">LEADERBOARD</button>
       </div>
     </div>
 
-    <!-- ── Profile Modal ── -->
-    <div id="profile-modal" class="modal-overlay">
+    <!-- ── Auth Modal ── -->
+    <div id="auth-modal" class="modal-overlay">
       <div class="modal-box">
-        <div class="modal-title">RUNNER PROFILE</div>
-        <div class="input-group">
-          <label>CODENAME</label>
-          <input type="text" id="prof-name" placeholder="Enter username" maxlength="12">
+        <div class="modal-title">RUNNER ACCESS</div>
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchAuthTab('signin')">SIGN IN</button>
+          <button class="auth-tab" onclick="switchAuthTab('signup')">SIGN UP</button>
         </div>
-        <div class="input-group">
-          <label>REGION (COUNTRY)</label>
-          <select id="prof-country">
-            <option value="US">🇺🇸 United States</option>
-            <option value="GB">🇬🇧 United Kingdom</option>
-            <option value="CA">🇨🇦 Canada</option>
-            <option value="AU">🇦🇺 Australia</option>
-            <option value="DE">🇩🇪 Germany</option>
-            <option value="FR">🇫🇷 France</option>
-            <option value="JP">🇯🇵 Japan</option>
-            <option value="BR">🇧🇷 Brazil</option>
-            <option value="IN">🇮🇳 India</option>
-            <option value="KR">🇰🇷 South Korea</option>
-            <option value="RU">🇷🇺 Russia</option>
-            <option value="CN">🇨🇳 China</option>
-            <option value="IT">🇮🇹 Italy</option>
-            <option value="ES">🇪🇸 Spain</option>
-            <option value="MX">🇲🇽 Mexico</option>
-            <option value="ID">🇮🇩 Indonesia</option>
-            <option value="TR">🇹🇷 Turkey</option>
-            <option value="NL">🇳🇱 Netherlands</option>
-            <option value="SE">🇸🇪 Sweden</option>
-            <option value="PL">🇵🇱 Poland</option>
-            <option value="XX">🏳️ Other</option>
-          </select>
+
+        <!-- Sign In Panel -->
+        <div id="signin-panel" class="auth-panel active">
+          <div class="input-group">
+            <label>EMAIL</label>
+            <input type="email" id="signin-email" placeholder="your@email.com">
+          </div>
+          <div class="input-group">
+            <label>PASSWORD</label>
+            <input type="password" id="signin-pass" placeholder="••••••••">
+          </div>
+          <div id="signin-error" class="auth-error"></div>
+          <button class="auth-submit" onclick="doSignIn()">ENTER</button>
+          <div class="auth-divider">OR</div>
+          <button class="google-btn" onclick="doGoogleSignIn()">
+            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            GOOGLE
+          </button>
         </div>
-        <button id="start-btn" style="width:100%; margin-top:10px;" onclick="saveProfile()">CONFIRM</button>
+
+        <!-- Sign Up Panel -->
+        <div id="signup-panel" class="auth-panel">
+          <div class="input-group">
+            <label>CODENAME</label>
+            <input type="text" id="signup-name" placeholder="Your runner name" maxlength="12">
+          </div>
+          <div class="input-group">
+            <label>EMAIL</label>
+            <input type="email" id="signup-email" placeholder="your@email.com">
+          </div>
+          <div class="input-group">
+            <label>PASSWORD (MIN 6)</label>
+            <input type="password" id="signup-pass" placeholder="••••••••">
+          </div>
+          <div class="input-group">
+            <label>REGION</label>
+            <select id="signup-country">
+              <option value="US">🇺🇸 United States</option>
+              <option value="GB">🇬🇧 United Kingdom</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="AU">🇦🇺 Australia</option>
+              <option value="DE">🇩🇪 Germany</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="JP">🇯🇵 Japan</option>
+              <option value="BR">🇧🇷 Brazil</option>
+              <option value="IN">🇮🇳 India</option>
+              <option value="KR">🇰🇷 South Korea</option>
+              <option value="RU">🇷🇺 Russia</option>
+              <option value="CN">🇨🇳 China</option>
+              <option value="IT">🇮🇹 Italy</option>
+              <option value="ES">🇪🇸 Spain</option>
+              <option value="MX">🇲🇽 Mexico</option>
+              <option value="ID">🇮🇩 Indonesia</option>
+              <option value="TR">🇹🇷 Turkey</option>
+              <option value="NL">🇳🇱 Netherlands</option>
+              <option value="SE">🇸🇪 Sweden</option>
+              <option value="PL">🇵🇱 Poland</option>
+              <option value="PK">🇵🇰 Pakistan</option>
+              <option value="XX">🏳️ Other</option>
+            </select>
+          </div>
+          <div id="signup-error" class="auth-error"></div>
+          <button class="auth-submit" onclick="doSignUp()">CREATE ACCOUNT</button>
+          <div class="auth-divider">OR</div>
+          <button class="google-btn" onclick="doGoogleSignIn()">
+            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            GOOGLE
+          </button>
+        </div>
+
+        <button class="close-btn" onclick="closeAuthModal()">PLAY AS GUEST</button>
       </div>
     </div>
 
@@ -788,7 +1037,8 @@
     // FIREBASE SETUP
     // ═══════════════════════════════
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+    import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAZRPunArYK30FvZGE9QePGKXL7XBqUriU",
@@ -799,12 +1049,76 @@
       appId: "1:651645718711:web:e550bc292ed9ec90d1fd32"
     };
 
-    let db;
+    let db, auth;
     try {
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
+      auth = getAuth(app);
     } catch(e) {
       console.warn("Firebase initialization failed. Offline mode active.", e);
+    }
+
+    // ═══════════════════════════════
+    // AUTH STATE
+    // ═══════════════════════════════
+    let currentUser = null;
+    let userProfile = null; // { name, country } from Firestore
+    let pendingSaveScore = false; // true if user signed in from game-over to save
+
+    function updateAuthUI() {
+      const hudEl = document.getElementById('auth-hud');
+      const playerEl = document.getElementById('player-display');
+      const menuBtn = document.getElementById('menu-auth-btn');
+      const runnerEl = document.getElementById('runner-name');
+
+      if (currentUser && userProfile) {
+        const name = userProfile.name || currentUser.displayName || 'Runner';
+        hudEl.innerHTML = `<span class="auth-name">${name}</span><button class="signout-btn" onclick="doSignOut()">OUT</button>`;
+        playerEl.textContent = 'PLAYER: ' + name;
+        if (runnerEl) runnerEl.textContent = 'Hello, ' + name;
+        if (menuBtn) { menuBtn.textContent = name.toUpperCase(); menuBtn.style.borderColor = 'var(--green)'; menuBtn.style.color = 'var(--green)'; menuBtn.onclick = null; }
+      } else {
+        hudEl.innerHTML = '<span class="guest-label">NOT SIGNED IN</span><button class="hud-signin-btn" onclick="showAuthModal()">SIGN IN</button>';
+        playerEl.textContent = 'GUEST';
+        if (runnerEl) runnerEl.textContent = 'Hello, Runner!';
+        if (menuBtn) { menuBtn.textContent = 'SIGN IN'; menuBtn.style.borderColor = 'var(--gold)'; menuBtn.style.color = 'var(--gold)'; menuBtn.onclick = () => showAuthModal(); }
+      }
+    }
+
+    // Load user profile from Firestore
+    async function loadUserProfile(user) {
+      if (!db || !user) { userProfile = null; return; }
+      try {
+        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
+        if (profileDoc.exists()) {
+          userProfile = profileDoc.data();
+        } else {
+          // First sign-in — create profile from auth info
+          userProfile = { name: user.displayName || 'Runner', country: 'XX' };
+          await setDoc(doc(db, 'profiles', user.uid), userProfile);
+        }
+      } catch(e) {
+        console.warn('Could not load profile', e);
+        userProfile = { name: user.displayName || 'Runner', country: 'XX' };
+      }
+    }
+
+    // Listen for auth state changes
+    if (auth) {
+      onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        if (user) {
+          await loadUserProfile(user);
+          // If user just signed in from game-over screen to save score
+          if (pendingSaveScore) {
+            pendingSaveScore = false;
+            await saveScoreToFirestore();
+          }
+        } else {
+          userProfile = null;
+        }
+        updateAuthUI();
+      });
     }
 
     // ═══════════════════════════════
@@ -834,8 +1148,6 @@
     let canvas, ctx;
     let running = false;
     let score = 0, hiScore = 0;
-    let username = 'Runner';
-    let country = 'US';
 
     let dino = {};
     let obstacles = [], particles = [];
@@ -944,47 +1256,165 @@
     window.onload = () => {
       canvas = document.getElementById('c');
       ctx = canvas.getContext('2d');
-      
-      const savedName = localStorage.getItem('ilr_name');
-      const savedCountry = localStorage.getItem('ilr_country');
-      
-      if (!savedName || !savedCountry) {
-        document.getElementById('profile-modal').style.display = 'flex';
-      } else {
-        username = savedName;
-        country = savedCountry;
-        updatePlayerDisplay();
-      }
-
       makeStars();
       makeGLines();
       makeClouds();
       initDino();
       resizeGame();
       render();
+      // Auth state is handled by onAuthStateChanged listener
     };
 
-    function updatePlayerDisplay() {
-      document.getElementById('player-display').textContent = 'PLAYER: ' + username;
-      document.getElementById('runner-name').textContent = 'Hello, ' + username;
-      document.getElementById('loser-name').innerHTML = '<strong>YOU DIED!</strong>';
+    // ═══════════════════════════════
+    // AUTH FUNCTIONS
+    // ═══════════════════════════════
+    function showAuthModal() {
+      document.getElementById('auth-modal').style.display = 'flex';
+      document.getElementById('signin-error').textContent = '';
+      document.getElementById('signup-error').textContent = '';
+    }
+    window.showAuthModal = showAuthModal;
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').style.display = 'none';
+    }
+    window.closeAuthModal = closeAuthModal;
+
+    function switchAuthTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+      if (tab === 'signin') {
+        document.querySelector('.auth-tab:first-child').classList.add('active');
+        document.getElementById('signin-panel').classList.add('active');
+      } else {
+        document.querySelector('.auth-tab:last-child').classList.add('active');
+        document.getElementById('signup-panel').classList.add('active');
+      }
+    }
+    window.switchAuthTab = switchAuthTab;
+
+    async function doSignIn() {
+      if (!auth) return;
+      const email = document.getElementById('signin-email').value.trim();
+      const pass = document.getElementById('signin-pass').value;
+      const errEl = document.getElementById('signin-error');
+      errEl.textContent = '';
+      if (!email || !pass) { errEl.textContent = 'FILL IN ALL FIELDS'; return; }
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        closeAuthModal();
+        ensureAudio();
+      } catch(e) {
+        const msg = e.code === 'auth/invalid-credential' ? 'WRONG EMAIL OR PASSWORD'
+                  : e.code === 'auth/user-not-found' ? 'NO ACCOUNT FOUND'
+                  : e.code === 'auth/too-many-requests' ? 'TOO MANY ATTEMPTS — TRY LATER'
+                  : e.message.substring(0, 60);
+        errEl.textContent = msg;
+      }
+    }
+    window.doSignIn = doSignIn;
+
+    async function doSignUp() {
+      if (!auth) return;
+      const name = document.getElementById('signup-name').value.replace(/[^\w]/g, '').trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const pass = document.getElementById('signup-pass').value;
+      const ctry = document.getElementById('signup-country').value;
+      const errEl = document.getElementById('signup-error');
+      errEl.textContent = '';
+      if (!name) { errEl.textContent = 'ENTER A CODENAME'; return; }
+      if (!email || !pass) { errEl.textContent = 'FILL IN ALL FIELDS'; return; }
+      if (pass.length < 6) { errEl.textContent = 'PASSWORD MUST BE 6+ CHARS'; return; }
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(cred.user, { displayName: name });
+        // Save profile to Firestore
+        userProfile = { name, country: ctry };
+        if (db) await setDoc(doc(db, 'profiles', cred.user.uid), userProfile);
+        updateAuthUI();
+        closeAuthModal();
+        ensureAudio();
+      } catch(e) {
+        const msg = e.code === 'auth/email-already-in-use' ? 'EMAIL ALREADY REGISTERED'
+                  : e.code === 'auth/weak-password' ? 'PASSWORD TOO WEAK'
+                  : e.code === 'auth/invalid-email' ? 'INVALID EMAIL'
+                  : e.message.substring(0, 60);
+        errEl.textContent = msg;
+      }
+    }
+    window.doSignUp = doSignUp;
+
+    async function doGoogleSignIn() {
+      if (!auth) return;
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+        closeAuthModal();
+        ensureAudio();
+      } catch(e) {
+        console.error('Google sign-in error', e);
+        const errEl = document.getElementById('signin-error');
+        if (errEl) errEl.textContent = 'GOOGLE SIGN-IN FAILED';
+      }
+    }
+    window.doGoogleSignIn = doGoogleSignIn;
+
+    async function doSignOut() {
+      if (!auth) return;
+      try {
+        await signOut(auth);
+      } catch(e) {
+        console.error('Sign out error', e);
+      }
+    }
+    window.doSignOut = doSignOut;
+
+    // ── Score Upsert (only saves best per user per difficulty) ──
+    async function saveScoreToFirestore() {
+      if (!db || !currentUser || !userProfile || score <= 0) return false;
+      const docId = `${currentUser.uid}_${selectedDiff}`;
+      try {
+        const existing = await getDoc(doc(db, 'scores', docId));
+        const newScore = Math.floor(score);
+        if (existing.exists() && existing.data().score >= newScore) {
+          return 'not_higher'; // Existing score is higher
+        }
+        await setDoc(doc(db, 'scores', docId), {
+          uid: currentUser.uid,
+          name: userProfile.name,
+          country: userProfile.country || 'XX',
+          score: newScore,
+          diff: selectedDiff,
+          timestamp: new Date()
+        });
+        return 'saved';
+      } catch(e) {
+        console.error('Error saving score', e);
+        return 'error';
+      }
     }
 
-    function saveProfile() {
-      const n = document.getElementById('prof-name').value.replace(/[^\w]/g, '').trim();
-      const c = document.getElementById('prof-country').value;
-      if (!n) return alert('Please enter a valid codename');
-      
-      username = n;
-      country = c;
-      localStorage.setItem('ilr_name', username);
-      localStorage.setItem('ilr_country', country);
-      
-      updatePlayerDisplay();
-      document.getElementById('profile-modal').style.display = 'none';
-      ensureAudio();
+    async function handleSaveScore() {
+      const statusEl = document.getElementById('save-status');
+      const saveBtn = document.getElementById('save-btn');
+      if (saveBtn) saveBtn.disabled = true;
+      if (statusEl) statusEl.innerHTML = '<span style="color:var(--cyan)">SAVING...</span>';
+      const result = await saveScoreToFirestore();
+      if (result === 'saved') {
+        if (statusEl) statusEl.innerHTML = '<span style="color:var(--green)">✓ SCORE SAVED TO LEADERBOARD</span>';
+      } else if (result === 'not_higher') {
+        if (statusEl) statusEl.innerHTML = '<span style="color:var(--gold)">YOUR BEST IS HIGHER — NOT UPDATED</span>';
+      } else {
+        if (statusEl) statusEl.innerHTML = '<span style="color:var(--red)">SAVE FAILED — CHECK CONNECTION</span>';
+      }
     }
-    window.saveProfile = saveProfile;
+    window.handleSaveScore = handleSaveScore;
+
+    function handleSignInToSave() {
+      pendingSaveScore = true;
+      showAuthModal();
+    }
+    window.handleSignInToSave = handleSignInToSave;
 
     let clouds = [];
     function makeClouds() {
@@ -1195,19 +1625,16 @@
       modeEl.style.color = diff.color;
       modeEl.style.textShadow = `0 0 10px ${diff.color}`;
 
-      // Save score to Firestore
-      if (score > 0 && navigator.onLine && db) {
-        try {
-          await addDoc(collection(db, "scores"), {
-            name: username,
-            country: country,
-            score: Math.floor(score),
-            diff: selectedDiff,
-            timestamp: new Date()
-          });
-        } catch (e) {
-          console.error("Error saving score", e);
-        }
+      // Show save score section based on auth state
+      const saveSection = document.getElementById('save-score-section');
+      if (currentUser && userProfile) {
+        saveSection.innerHTML = `
+          <button class="save-btn" id="save-btn" onclick="handleSaveScore()">SAVE SCORE</button>
+          <div class="save-status" id="save-status"></div>`;
+      } else {
+        saveSection.innerHTML = `
+          <button class="signin-prompt-btn" onclick="handleSignInToSave()">SIGN IN TO SAVE SCORE</button>
+          <div class="save-status" id="save-status" style="color:rgba(255,255,255,0.3)">Guest scores are not saved</div>`;
       }
     }
 
@@ -1259,7 +1686,25 @@
         tbody.innerHTML = html;
       } catch (e) {
         console.error("Error loading leaderboard", e);
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--red);">DATABASE PERMISSION OR INDEX ERROR<br>Ensure Firestore rules allow read/write and indices are built.</td></tr>';
+        // Check if error message contains an index creation URL
+        const errMsg = e.message || '';
+        const indexUrlMatch = errMsg.match(/(https:\/\/console\.firebase\.google\.com[^\s"']+)/);
+        if (indexUrlMatch) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--red);">
+            INDEX REQUIRED<br><br>
+            <span style="color:var(--cyan); font-size:10px;">Firestore needs a composite index for this query.</span><br><br>
+            <a href="${indexUrlMatch[1]}" target="_blank" rel="noopener" style="color:var(--gold); font-size:11px; text-decoration:underline; cursor:pointer; pointer-events:all;">
+              ▸ CLICK HERE TO CREATE INDEX ◂
+            </a><br><br>
+            <span style="color:rgba(255,255,255,0.4); font-size:9px;">After creating the index, wait ~1 minute then reload.</span>
+          </td></tr>`;
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--red);">
+            DATABASE ERROR<br><br>
+            <span style="color:rgba(255,255,255,0.5); font-size:10px;">${errMsg.substring(0, 120)}</span><br><br>
+            <span style="color:rgba(255,255,255,0.3); font-size:9px;">Check browser console (F12) for details.</span>
+          </td></tr>`;
+        }
       }
     }
     window.loadLeaderboard = loadLeaderboard;
